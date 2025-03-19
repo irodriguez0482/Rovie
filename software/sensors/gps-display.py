@@ -8,10 +8,9 @@ import os  # Used to check if the file exists
 mpu = mpu6050.mpu6050(0x68)
 
 # Define GPS Serial Port 
-GPS_PORT = "/dev/ttyUSB0"  # Change to "/dev/ttyACM0" if neccessary
+GPS_PORT = "/dev/ttyACM0"  # Change to "/dev/ttyACM1" if neccessary
 BAUD_RATE = 9600  # Standard GPS baud rate
 gps_serial = serial.Serial(GPS_PORT, BAUD_RATE, timeout=1)  # Open serial connection to GPS
-
 # Define CSV file for logging data
 LOG_FILE = "gps_imu_log.csv"
 
