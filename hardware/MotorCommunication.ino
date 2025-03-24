@@ -69,8 +69,6 @@ void setup() {
   Serial.println("2ArduinoReady3");
 } 
 
-
-
 int en17=0; //Will take input from Pi, turns wheel motors on and off
 int en23=0; //will take input from Pi, turn plow motor on and off
 int enPill=0; //will take input from Pi, turn pills on and off
@@ -102,7 +100,6 @@ void getSerialData(){
 }
 
 void processData(String command){
-  //if(data!="000000"){
     en17=command[0]-48; //enables wheel motors
     m17=(command[1]-48)*10+(command[2]-48); //forward, backward, left, or right
     en23=command[3]-48; //enables plow movement
@@ -112,6 +109,9 @@ void processData(String command){
     //motors on or off
     //will also have if statement for pills, which will determine if they get called or not       
       pill(enPill);
+  }
+    //motors on or off
+    //will also have if statement for pills, which will determine if they get called or not 
     if(en17==0){
       digitalWrite(enPin,HIGH); //turns wheel motors off
     }
@@ -127,8 +127,6 @@ void processData(String command){
       digitalWrite(enPin23,LOW); //allows plow motors to operating
       plow(pDir); 
     } 
-
-    //for now, will just code forward and up, but direction will be set by serial communication     
 }
 
 void move17(int dir17){
@@ -154,8 +152,9 @@ void move17(int dir17){
   }
 
 }
+
 void forward(){
-  
+ 
   digitalWrite(dirPinR,HIGH);  // Enables the motor to move in a particular direction                            
   digitalWrite(dirPinL,LOW); // Enables the motor to move in a particular direction  
 
@@ -174,7 +173,7 @@ void forward(){
 }
 
 void backward(){
-  
+
   digitalWrite(dirPinR,LOW);  // Enables the motor to move in a particular direction                            
   digitalWrite(dirPinL,HIGH); // Enables the motor to move in a particular direction   
   digitalWrite(ms1Pin, HIGH); 
@@ -240,12 +239,11 @@ void plow(int dir23){
   while(rot23<15){ //keeps plow from moving too far up or down, experiments will determine how much to move
   Serial.println("Plow"); 
   // For loop makes 200 * 1 pulses for making one full cycle rotation 
-  for(int x = 0; x < numSteps * 1 * rotations; x++) {  //times 2 cause half-step
-    digitalWrite(stepPin23,HIGH);  
-    delayMicroseconds(delay1);  
-    digitalWrite(stepPin23,LOW);    
-    delayMicroseconds(delay1);  
-  } 
+  for(int x = 0; x < numSteps * 1 * rotations; x++) {  //times 2 cause half-step                            
+  digitalWrite(ms1Pin23, HIGH); 
+  digitalWrite(ms2Pin23, LOW); 
+  digitalWrite(ms3Pin23, LOW); 
+  }
   rot23=rot23+1;
   }
 } 
@@ -258,7 +256,4 @@ void pill(int pow){
     digitalWrite(Pillpin, LOW);
   }
 }
-  else{
-    digitalWrite(Pillpin, LOW);
-  }
-}
+
