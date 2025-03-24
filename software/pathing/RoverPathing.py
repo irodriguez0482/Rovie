@@ -7,57 +7,93 @@
 
 import testmodule
 import serial
+import time
 import MotorCom
+import ForceButton
 
 SERIAL_PORT = "/dev/ttyACM2"  # Update if necessary (e.g., "COM3" for Windows)
 BAUD_RATE = 9600
+ROVER_LENGTH = 1    #TEMP VALUES in Meters
+ROVER_WIDTH = 1
 
 def driveRover(dir):
-    #forward => dir = 1
-    #back => dir = -1
-    #stop => dir = 0
-    #Code to drive rover
-    
-    if dir == 1:
-        #tell ardrino to drive forward
-        print("Drive Forward")
-        MotorCom.send_command(SERIAL_PORT, MotorCom.direction("FORWARD"))
-    elif dir == -1:
-        #tell ardrino to drive backward
-        print("Drive Backward")
-        MotorCom.send_command(SERIAL_PORT, MotorCom.direction("BACKWARD"))
-    elif dir == 0:
-        #tell ardrino to stop drive motors
-        print("Stop")
-        MotorCom.send_command(SERIAL_PORT, MotorCom.direction("STOP"))
+    if (dir in MotorCom.direction):    
+        MotorCom.send_command(SERIAL_PORT, MotorCom.direction(dir))
     else:
-        #tell ardrino to stop drive motors
-        driveRover(0)
-    
-    return None
+        print("[WARNING] NOT VALID DIRECTION")    
 
 def turnRover(turnDir):
-    #code to turn rover 180 degrees around a radius
-    if turnDir:
-        #turn right
-        print("Turn Right")
-        MotorCom.send_command(SERIAL_PORT, MotorCom.direction("RIGHT"))
+    if (turnDir in MotorCom.direction):    
+        MotorCom.send_command(SERIAL_PORT, MotorCom.turnDirection(turnDir))
+        time.sleep(1)   #Time it takes to turn 90 in a direction
+        MotorCom.send_command(SERIAL_PORT, MotorCom.turnDirection("STOP"))        
     else:
-        #turn left
-        print("Turn Left")
-        MotorCom.send_command(SERIAL_PORT, MotorCom.direction("LEFT"))
-                
-    return None
+        print("[WARNING] NOT VALID TURN DIRECTION")    
+       
+def actuateArm(dir):
+    if (dir in MotorCom.arm):
+        MotorCom.send_command(SERIAL_PORT, MotorCom.arm(dir))
+        time.sleep(1)   #Time it takes to complete arm movement
+        MotorCom.send_command(SERIAL_PORT, MotorCom.arm("STOP"))     
+    else:
+        print("[WARNING] NOT VALID ARM MOVEMENT")    
+        
+def toggleVibration(tog):
+    if (tog in MotorCom.vibration):
+        MotorCom.send_command(SERIAL_PORT, MotorCom.vibration(tog))      
+    else:
+        print("[WARNING] NOT VALID VIBRATION TOGGLE")    
+
+def calculateDistanceTraveled(startCoords, currentCoords):
+    #code to measure how far the rover moved from position
+    distance = 0 #calculated from IMU and GPS
+    return distance
+
+def roverTravelDistance(targetDistance):
+    distance = 0
+    while (distance < targetDistance):
+        distance = calculateDistanceTraveled()
+        time.sleep(0.1)
+        
+def driveRoverDistance(dir, dist):
+    driveRover(dir)
+    distanceTraveled = 0
+    #set to gps coord
+    # startCoord = 0
+    roverTravelDistance(dist)
+    driveRover("STOP")
 
 def stopRover():
     #tell ardrino to stop all function
     MotorCom.send_command(SERIAL_PORT, MotorCom.STOP)
     return None
 
-def calculateDistanceTraveled(startCoords, currentCoords):
-    #code to measure how far the rover moved from position
-    distance = 0 #calculated from IMU and GPS
-    return distance
+def rerouteRover():
+    #reroute rover around an obstacle    
+    #backward
+    #stop vibration
+    #raise arm
+    #turn rover 90 degrees left
+    #forward
+    #90 right
+    #forward
+    #90 right
+    #try forward else repeat
+    #90 left
+    
+    driveRoverDistance("BACKWARD", ROVER_LENGTH / 2)
+    toggleVibration("OFF")
+    actuateArm("UP")
+    turnRover("LEFT")
+    driveRoverDistance("FORWARD", ROVER_WIDTH)
+    turnRover("RIGHT")
+    driveRoverDistance("FORWARD", ROVER_LENGTH)
+    turnRover("RIGHT")
+    driveRoverDistance("FORWARD", ROVER_LENGTH / 2)    
+    if (ForceButton.GetForceButton()):
+        rerouteRover()
+    else:
+        turnRover("LEFT")
 
 def roverClearArea(lineLength, numLines):
     finishedLine = False
@@ -66,16 +102,23 @@ def roverClearArea(lineLength, numLines):
                             #False = Left Turn
     numLinesCompleted = 0
     distanceTraveled = 0
+    pathObstructed = False
     
     try:
         with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
             while not finishedGrid:
                 #start of new line
-                driveRover(1)   #drive rover forward
+                driveRover("FORWARD")   #drive rover forward
                 while not finishedLine:
+                    pathObstructed = ForceButton.GetForceButton()                    
+                    if (pathObstructed):
+                        rerouteRover()
+                    
                     distanceTraveled = calculateDistanceTraveled()
                     if distanceTraveled >= lineLength: #meters
                         finishedLine = True
+                        
+                    time.sleep(0.1)
                         
                 turnRover(turnDirection)
                 turnDirection = not turnDirection
@@ -85,6 +128,8 @@ def roverClearArea(lineLength, numLines):
                     finishedGrid = False
                 else:
                     finishedGrid = True
+                    
+                time.sleep(0.1)
             stopRover()
             
     except serial.SerialException as e:

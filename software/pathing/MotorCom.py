@@ -26,12 +26,16 @@ STOP = 000000
 direction = {
     "FORWARD": 100000,
     "BACKWARD": 101000,
+    "STOP": 000000
+}
+
+turnDirection = {
     "LEFT": 110000,
     "RIGHT": 111000,
     "STOP": 000000
 }
 
-plow = {
+arm = {
     "UP": 000100,
     "DOWN": 000110,
     "STOP": 000000
