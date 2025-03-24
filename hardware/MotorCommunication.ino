@@ -33,6 +33,7 @@ int ms1Pin23 =10;
 int ms2Pin23 =11;
 int ms3Pin23 = 12;
 int enPin23 = A2;
+int rot23=0; //keeps track of how much to rotate plow
 #define stepPin23 9
 #define dirPin23 8
 
@@ -68,15 +69,6 @@ void setup() {
   Serial.println("2ArduinoReady3");
 } 
 
-#define messageSize 8
-#define startMarker 2
-#define endMarker 3
-int incomingBit=0; //for Pi commands
-int incomingByte[messageSize];
-int bytesRecvd=0;
-bool inProgress = false;
-bool allReceived = false;
-
 int en17=0; //Will take input from Pi, turns wheel motors on and off
 int en23=0; //will take input from Pi, turn plow motor on and off
 int enPill=0; //will take input from Pi, turn pills on and off
@@ -108,12 +100,15 @@ void getSerialData(){
 }
 
 void processData(String command){
-  if(data!="000000"){
     en17=command[0]-48; //enables wheel motors
     m17=(command[1]-48)*10+(command[2]-48); //forward, backward, left, or right
     en23=command[3]-48; //enables plow movement
     pDir=command[4]-48; //sets plow up or down
     enPill=command[5]-48;//sets pills on or off
+  //}
+    //motors on or off
+    //will also have if statement for pills, which will determine if they get called or not       
+      pill(enPill);
   }
     //motors on or off
     //will also have if statement for pills, which will determine if they get called or not 
@@ -122,20 +117,16 @@ void processData(String command){
     }
     else{
       digitalWrite(enPin,LOW); //allows wheel motors to operating
+      move17(m17); //could edit later to take speed, but should only want 1 speed anyway.
     }       
     if(en23==0){
       digitalWrite(enPin23,HIGH); //turns plow motors off
+      rot23=0; //resets plow so that it can rotate again
     }
     else{
       digitalWrite(enPin23,LOW); //allows plow motors to operating
-      plow(pDir);
+      plow(pDir); 
     } 
-
-    //for now, will just code forward and up, but direction will be set by serial communication     
-    if(data!="000000"){        
-      move17(m17); //could edit later to take speed, but should only want 1 speed anyway.
-      pill(enPill);
-    }
 }
 
 void move17(int dir17){
@@ -161,8 +152,9 @@ void move17(int dir17){
   }
 
 }
-void backward(){
-  
+
+void forward(){
+ 
   digitalWrite(dirPinR,HIGH);  // Enables the motor to move in a particular direction                            
   digitalWrite(dirPinL,LOW); // Enables the motor to move in a particular direction  
 
@@ -180,8 +172,8 @@ void backward(){
   }  
 }
 
-void forward(){
-  
+void backward(){
+
   digitalWrite(dirPinR,LOW);  // Enables the motor to move in a particular direction                            
   digitalWrite(dirPinL,HIGH); // Enables the motor to move in a particular direction   
   digitalWrite(ms1Pin, HIGH); 
@@ -233,25 +225,27 @@ void left(){
 } 
 
 void plow(int dir23){
-  
   //nema23     
   if(dir23==0){        
-  digitalWrite(dirPin23,LOW); // direction will switch for up vs. down, I'm not sure which way yet  
+  digitalWrite(dirPin23,LOW); // up  
   }
   else{
-    digitalWrite(dirPin23,HIGH); // direction will switch for up vs. down, I'm not sure which way yet
+    digitalWrite(dirPin23,HIGH); // down
   }                             
+  digitalWrite(ms1Pin23, LOW); 
+  digitalWrite(ms2Pin23, LOW); 
+  digitalWrite(ms3Pin23, LOW);
+
+  while(rot23<15){ //keeps plow from moving too far up or down, experiments will determine how much to move
+  Serial.println("Plow"); 
+  // For loop makes 200 * 1 pulses for making one full cycle rotation 
+  for(int x = 0; x < numSteps * 1 * rotations; x++) {  //times 2 cause half-step                            
   digitalWrite(ms1Pin23, HIGH); 
   digitalWrite(ms2Pin23, LOW); 
   digitalWrite(ms3Pin23, LOW); 
-
-  // For loop makes 200 * 1 pulses for making one full cycle rotation 
-  for(int x = 0; x < numSteps * 2 * rotations; x++) {  //times 2 cause half-step
-    digitalWrite(stepPin23,HIGH);  
-    delayMicroseconds(delay1);  
-    digitalWrite(stepPin23,LOW);    
-    delayMicroseconds(delay1);  
-  } 
+  }
+  rot23=rot23+1;
+  }
 } 
 
 void pill(int pow){
@@ -262,3 +256,4 @@ void pill(int pow){
     digitalWrite(Pillpin, LOW);
   }
 }
+
