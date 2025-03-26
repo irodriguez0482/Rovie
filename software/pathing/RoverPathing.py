@@ -11,7 +11,7 @@ import time
 import MotorCom
 import ForceButton
 
-SERIAL_PORT = "/dev/ttyACM2"  # Update if necessary (e.g., "COM3" for Windows)
+SERIAL_PORT = "/dev/ttyACM0"  # Update if necessary (e.g., "COM3" for Windows)
 BAUD_RATE = 9600
 ROVER_LENGTH = 1    #TEMP VALUES in Meters
 ROVER_WIDTH = 1
@@ -143,6 +143,9 @@ def roverClearArea(lineLength, numLines):
             
 def main():
     # roverClearArea(3, 6)
+    driveRover("FORWARD")
+    time.Sleep(2)
+    stopRover()
     pass
     
 if __name__ == "__main__":
