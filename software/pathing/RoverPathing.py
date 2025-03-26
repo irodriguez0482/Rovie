@@ -147,8 +147,8 @@ def main():
         with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
             # driveRover("FORWARD")
             MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
-            time.sleep(2)
-            MotorCom.send_command(ser, MotorCom.direction["STOP"])
+            # time.sleep(2)
+            # MotorCom.send_command(ser, MotorCom.direction["STOP"])
             # stopRover()
             
     except serial.SerialException as e:
