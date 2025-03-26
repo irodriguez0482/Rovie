@@ -22,9 +22,13 @@ except serial.SerialException as e:
     print("[ERROR] Serial communication issue:", e)    
 
 def driveRover(dir):
-    if (dir in MotorCom.direction):    
+    if (dir in MotorCom.direction):
         MotorCom.send_command(ser, MotorCom.direction[dir])
-        MotorCom.receive_from_arduino(ser)
+        i = 0
+        while i < 5:
+            MotorCom.receive_from_arduino(ser)
+            i += 1
+            time.sleep(1)
     else:
         print("[WARNING] NOT VALID DIRECTION")    
 
@@ -151,11 +155,11 @@ def roverClearArea(lineLength, numLines):
 def main():
     # roverClearArea(3, 6)   
         # driveRover("STOP")     
-        i = 0
+        # i = 0
+        # while i < 10:
+        #     time.sleep(1)
+        #     i += 1
         driveRover("FORWARD")
-        while i < 10:
-            time.sleep(1)
-            i += 1
         
         # i = 0
         # while i < 10:

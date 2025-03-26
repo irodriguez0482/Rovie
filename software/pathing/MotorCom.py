@@ -56,4 +56,4 @@ def receive_from_arduino(ser):
     """Continuously read responses from the Arduino."""
     while ser.in_waiting > 0:
         response = ser.readline().decode(errors='replace').strip()
-        print(f"[Arduino] {response}")
+        print(f"[Arduino] {response}")    
