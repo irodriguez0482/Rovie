@@ -156,6 +156,19 @@ def main():
             driveRover("FORWARD")
             time.sleep(1)
             i += 1
+        
+        i = 0
+        while i < 10:
+            driveRover("BACKWARD")
+            time.sleep(1)
+            i += 1            
+            
+        i = 0
+        while i < 10:
+            driveRover("STOP")
+            time.sleep(1)
+            i += 1
+        
     # MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
         # time.sleep(5)
         # driveRover("BACKWARD")
