@@ -150,8 +150,12 @@ def roverClearArea(lineLength, numLines):
             
 def main():
     # roverClearArea(3, 6)   
-        # driveRover("STOP")        
-        driveRover("FORWARD")
+        # driveRover("STOP")     
+        i = 0
+        while i < 10:
+            driveRover("FORWARD")
+            time.sleep(1)
+            i += 1
     # MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
         # time.sleep(5)
         # driveRover("BACKWARD")
