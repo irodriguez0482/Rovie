@@ -98,7 +98,7 @@ def rerouteRover():
 def roverClearArea(lineLength, numLines):
     finishedLine = False
     finishedGrid = False
-    turnDirection = True    #True = Right Turn, 
+    turnRight = True        #True = Right Turn, 
                             #False = Left Turn
     numLinesCompleted = 0
     distanceTraveled = 0
@@ -120,8 +120,13 @@ def roverClearArea(lineLength, numLines):
                         
                     time.sleep(0.1)
                         
-                turnRover(turnDirection)
-                turnDirection = not turnDirection
+                if (turnRight):
+                    turnRover("RIGHT")
+                    turnRight = False
+                else:
+                    turnRover("LEFT")
+                    turnRight = True
+                    
                 numLinesCompleted += 1
                 
                 if (numLinesCompleted < numLines):
