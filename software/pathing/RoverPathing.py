@@ -16,7 +16,7 @@ BAUD_RATE = 9600
 ROVER_LENGTH = 1    #TEMP VALUES in Meters
 ROVER_WIDTH = 1
 
-ser = serial.Serial
+ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2)
 
 def driveRover(dir):
     if (dir in MotorCom.direction):    
@@ -147,19 +147,19 @@ def roverClearArea(lineLength, numLines):
             
 def main():
     # roverClearArea(3, 6)
-    try:
-        with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
+    # try:
+        # with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
             # while True:
                 
-            driveRover("FORWARD")
-            # MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
-            time.sleep(10)
-            # time.sleep(2)
-            # MotorCom.send_command(ser, MotorCom.direction["STOP"])
-            stopRover()
+    driveRover("FORWARD")
+    # MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
+    time.sleep(10)
+    # time.sleep(2)
+    # MotorCom.send_command(ser, MotorCom.direction["STOP"])
+    stopRover()
             
-    except serial.SerialException as e:
-        print("[ERROR] Serial communication issue:", e)
+    # except serial.SerialException as e:
+    #     print("[ERROR] Serial communication issue:", e)
     
 if __name__ == "__main__":
     main()
