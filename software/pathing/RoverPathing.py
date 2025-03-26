@@ -16,9 +16,12 @@ BAUD_RATE = 9600
 ROVER_LENGTH = 1    #TEMP VALUES in Meters
 ROVER_WIDTH = 1
 
+ser = serial.Serial
+
 def driveRover(dir):
     if (dir in MotorCom.direction):    
         MotorCom.send_command(ser, MotorCom.direction[dir])
+        MotorCom.receive_from_arduino(ser)
     else:
         print("[WARNING] NOT VALID DIRECTION")    
 
@@ -66,6 +69,7 @@ def driveRoverDistance(dir, dist):
 def stopRover():
     #tell ardrino to stop all function
     MotorCom.send_command(SERIAL_PORT, MotorCom.STOP)
+    MotorCom.receive_from_arduino(ser)
     return None
 
 def rerouteRover():
@@ -145,16 +149,14 @@ def main():
     # roverClearArea(3, 6)
     try:
         with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
-            while True:
+            # while True:
                 
-            # driveRover("FORWARD")
-                MotorCom.receive_from_arduino(ser)
-                MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
-                MotorCom.receive_from_arduino(ser)
-                time.sleep(5)
+            driveRover("FORWARD")
+            # MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
+            time.sleep(10)
             # time.sleep(2)
             # MotorCom.send_command(ser, MotorCom.direction["STOP"])
-            # stopRover()
+            stopRover()
             
     except serial.SerialException as e:
         print("[ERROR] Serial communication issue:", e)
