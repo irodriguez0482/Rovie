@@ -54,6 +54,9 @@ def send_command(ser, command):
 
 def receive_from_arduino(ser):
     """Continuously read responses from the Arduino."""
+    while ser.in_waiting == 0:
+        print("[DEBUG] Waiting for Arduino")
+        time.sleep(0.1)
     while ser.in_waiting > 0:
         response = ser.readline().decode(errors='replace').strip()
         print(f"[Arduino] {response}")    

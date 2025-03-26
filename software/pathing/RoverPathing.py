@@ -23,12 +23,8 @@ except serial.SerialException as e:
 
 def driveRover(dir):
     if (dir in MotorCom.direction):
-        i = 0
-        while i < 5:
-            MotorCom.send_command(ser, MotorCom.direction[dir])
-            MotorCom.receive_from_arduino(ser)
-            i += 1
-            time.sleep(1)
+        MotorCom.send_command(ser, MotorCom.direction[dir])
+        MotorCom.receive_from_arduino(ser)
     else:
         print("[WARNING] NOT VALID DIRECTION")    
 
