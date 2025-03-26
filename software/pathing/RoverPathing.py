@@ -155,6 +155,7 @@ def main():
         # while i < 10:
         #     time.sleep(1)
         #     i += 1
+        driveRover("STOP")
         driveRover("FORWARD")
         time.sleep(5)
         driveRover("BACKWARD")
