@@ -24,26 +24,26 @@ import RPi.GPIO as GPIO
 STOP = 000000
 
 direction = {
-    "FORWARD": 100000,
-    "BACKWARD": 101000,
-    "STOP": 000000
+    "FORWARD": "100000",
+    "BACKWARD": "101000",
+    "STOP": "000000"
 }
 
 turnDirection = {
-    "LEFT": 110000,
-    "RIGHT": 111000,
-    "STOP": 000000
+    "LEFT": "110000",
+    "RIGHT": "111000",
+    "STOP": "000000"
 }
 
 arm = {
-    "UP": 000100,
-    "DOWN": 000110,
-    "STOP": 000000
+    "UP": "000100",
+    "DOWN": "000110",
+    "STOP": "000000"
 }
 
 vibration = {
-    "ON": 000001,
-    "OFF": 000000
+    "ON": "000001",
+    "OFF": "000000"
 }
 
 def send_command(ser, command):
