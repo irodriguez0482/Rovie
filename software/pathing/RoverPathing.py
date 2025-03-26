@@ -28,7 +28,7 @@ def driveRover(dir):
             MotorCom.send_command(ser, MotorCom.direction[dir])
             MotorCom.receive_from_arduino(ser)
             i += 1
-            time.sleep(0.1)
+            time.sleep(1)
     else:
         print("[WARNING] NOT VALID DIRECTION")    
 
