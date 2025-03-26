@@ -145,8 +145,11 @@ def main():
     # roverClearArea(3, 6)
     try:
         with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
+            while True:
+                
             # driveRover("FORWARD")
-            MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
+                MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
+                time.sleep(60)
             # time.sleep(2)
             # MotorCom.send_command(ser, MotorCom.direction["STOP"])
             # stopRover()
