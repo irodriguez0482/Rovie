@@ -18,13 +18,13 @@ ROVER_WIDTH = 1
 
 def driveRover(dir):
     if (dir in MotorCom.direction):    
-        MotorCom.send_command(SERIAL_PORT, MotorCom.direction(dir))
+        MotorCom.send_command(SERIAL_PORT, MotorCom.direction[dir])
     else:
         print("[WARNING] NOT VALID DIRECTION")    
 
 def turnRover(turnDir):
     if (turnDir in MotorCom.direction):    
-        MotorCom.send_command(SERIAL_PORT, MotorCom.turnDirection(turnDir))
+        MotorCom.send_command(SERIAL_PORT, MotorCom.turnDirection[turnDir])
         time.sleep(1)   #Time it takes to turn 90 in a direction
         MotorCom.send_command(SERIAL_PORT, MotorCom.turnDirection("STOP"))        
     else:
@@ -32,7 +32,7 @@ def turnRover(turnDir):
        
 def actuateArm(dir):
     if (dir in MotorCom.arm):
-        MotorCom.send_command(SERIAL_PORT, MotorCom.arm(dir))
+        MotorCom.send_command(SERIAL_PORT, MotorCom.arm[dir])
         time.sleep(1)   #Time it takes to complete arm movement
         MotorCom.send_command(SERIAL_PORT, MotorCom.arm("STOP"))     
     else:
@@ -40,7 +40,7 @@ def actuateArm(dir):
         
 def toggleVibration(tog):
     if (tog in MotorCom.vibration):
-        MotorCom.send_command(SERIAL_PORT, MotorCom.vibration(tog))      
+        MotorCom.send_command(SERIAL_PORT, MotorCom.vibration[tog])      
     else:
         print("[WARNING] NOT VALID VIBRATION TOGGLE")    
 
