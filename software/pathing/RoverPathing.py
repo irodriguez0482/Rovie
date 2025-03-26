@@ -23,9 +23,9 @@ except serial.SerialException as e:
 
 def driveRover(dir):
     if (dir in MotorCom.direction):
-        MotorCom.send_command(ser, MotorCom.direction[dir])
         i = 0
         while i < 5:
+            MotorCom.send_command(ser, MotorCom.direction[dir])
             MotorCom.receive_from_arduino(ser)
             i += 1
             time.sleep(1)
