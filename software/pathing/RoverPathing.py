@@ -18,7 +18,7 @@ ROVER_WIDTH = 1
 
 def driveRover(dir):
     if (dir in MotorCom.direction):    
-        MotorCom.send_command(SERIAL_PORT, MotorCom.direction[dir])
+        MotorCom.send_command(ser, MotorCom.direction[dir])
     else:
         print("[WARNING] NOT VALID DIRECTION")    
 
@@ -143,10 +143,16 @@ def roverClearArea(lineLength, numLines):
             
 def main():
     # roverClearArea(3, 6)
-    driveRover("FORWARD")
-    time.Sleep(2)
-    stopRover()
-    pass
+    try:
+        with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
+            # driveRover("FORWARD")
+            MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
+            time.Sleep(2)
+            MotorCom.send_command(ser, MotorCom.direction["STOP"])
+            # stopRover()
+            
+    except serial.SerialException as e:
+        print("[ERROR] Serial communication issue:", e)
     
 if __name__ == "__main__":
     main()
