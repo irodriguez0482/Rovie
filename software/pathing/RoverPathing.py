@@ -148,8 +148,10 @@ def main():
             while True:
                 
             # driveRover("FORWARD")
+                MotorCom.receive_from_arduino(ser)
                 MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
-                time.sleep(60)
+                MotorCom.receive_from_arduino(ser)
+                time.sleep(5)
             # time.sleep(2)
             # MotorCom.send_command(ser, MotorCom.direction["STOP"])
             # stopRover()
