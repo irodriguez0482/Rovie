@@ -148,42 +148,17 @@ def roverClearArea(lineLength, numLines):
         print("[ERROR] Serial communication issue:", e)
             
             
-def main():
-    # roverClearArea(3, 6)   
-        # driveRover("STOP")     
-        # i = 0
-        # while i < 10:
-        #     time.sleep(1)
-        #     i += 1
-        driveRover("STOP")
-        driveRover("FORWARD")
-        time.sleep(5)
-        driveRover("BACKWARD")
-        time.sleep(5)
-        driveRover("STOP")
-        
-        # i = 0
-        # while i < 10:
-        #     driveRover("BACKWARD")
-        #     time.sleep(1)
-        #     i += 1            
-            
-        # i = 0
-        # while i < 10:
-        #     driveRover("STOP")
-        #     time.sleep(1)
-        #     i += 1
-        
-        # driveRover("FORWARD")
-        
-    # MotorCom.send_command(ser, MotorCom.direction["FORWARD"])
-        # time.sleep(5)
-        # driveRover("BACKWARD")
-        # time.sleep(5)
-        # driveRover("STOP")
-    # time.sleep(2)
-    # MotorCom.send_command(ser, MotorCom.direction["STOP"])
-    # stopRover()
+def main():        
+    #Must send dummy command to wait for rover to be ready!!!
+    driveRover("STOP")
+    
+    #Begin actual pathing
+    driveRover("FORWARD")
+    time.sleep(5)
+    driveRover("BACKWARD")
+    time.sleep(5)
+    driveRover("STOP")
+    
     
 if __name__ == "__main__":
     main()
