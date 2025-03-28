@@ -8,8 +8,11 @@
 import testmodule
 import serial
 import time
+import haversine as hs
+from haversine import Unit
 import MotorCom
 import ForceButton
+import GPS
 
 SERIAL_PORT = "/dev/ttyACM0"  # Update if necessary (e.g., "COM3" for Windows)
 BAUD_RATE = 9600
@@ -52,7 +55,7 @@ def toggleVibration(tog):
 
 def calculateDistanceTraveled(startCoords, currentCoords):
     #code to measure how far the rover moved from position
-    distance = 0 #calculated from IMU and GPS
+    distance = hs.haversine(startCoords, currentCoords)
     return distance
 
 def roverTravelDistance(targetDistance):
@@ -115,13 +118,14 @@ def roverClearArea(lineLength, numLines):
         with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2) as ser:
             while not finishedGrid:
                 #start of new line
+                lineStartCoords = GPS.GetCurrentLocation()
                 driveRover("FORWARD")   #drive rover forward
                 while not finishedLine:
                     pathObstructed = ForceButton.GetForceButton()                    
                     if (pathObstructed):
                         rerouteRover()
                     
-                    distanceTraveled = calculateDistanceTraveled()
+                    distanceTraveled = calculateDistanceTraveled(lineStartCoords, GPS.GetCurrentLocation())
                     if distanceTraveled >= lineLength: #meters
                         finishedLine = True
                         
