@@ -34,22 +34,27 @@ def driveRover(dir):
 def turnRover(turnDir):
     if (turnDir in MotorCom.direction):    
         MotorCom.send_command(SERIAL_PORT, MotorCom.turnDirection[turnDir])
+        MotorCom.receive_from_arduino(ser)
         time.sleep(1)   #Time it takes to turn 90 in a direction
         MotorCom.send_command(SERIAL_PORT, MotorCom.turnDirection("STOP"))        
+        MotorCom.receive_from_arduino(ser)
     else:
         print("[WARNING] NOT VALID TURN DIRECTION")    
        
 def actuateArm(dir):
     if (dir in MotorCom.arm):
         MotorCom.send_command(SERIAL_PORT, MotorCom.arm[dir])
+        MotorCom.receive_from_arduino(ser)
         time.sleep(1)   #Time it takes to complete arm movement
-        MotorCom.send_command(SERIAL_PORT, MotorCom.arm("STOP"))     
+        MotorCom.send_command(SERIAL_PORT, MotorCom.arm("STOP"))    
+        MotorCom.receive_from_arduino(ser) 
     else:
         print("[WARNING] NOT VALID ARM MOVEMENT")    
         
 def toggleVibration(tog):
     if (tog in MotorCom.vibration):
-        MotorCom.send_command(SERIAL_PORT, MotorCom.vibration[tog])      
+        MotorCom.send_command(SERIAL_PORT, MotorCom.vibration[tog])   
+        MotorCom.receive_from_arduino(ser)   
     else:
         print("[WARNING] NOT VALID VIBRATION TOGGLE")    
 
@@ -66,9 +71,6 @@ def roverTravelDistance(targetDistance):
         
 def driveRoverDistance(dir, dist):
     driveRover(dir)
-    distanceTraveled = 0
-    #set to gps coord
-    # startCoord = 0
     roverTravelDistance(dist)
     driveRover("STOP")
 
