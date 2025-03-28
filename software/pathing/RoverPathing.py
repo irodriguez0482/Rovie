@@ -60,7 +60,7 @@ def toggleVibration(tog):
 
 def calculateDistanceTraveled(startCoords, currentCoords):
     #code to measure how far the rover moved from position
-    distance = hs.haversine(startCoords, currentCoords)
+    distance = hs.haversine(startCoords, currentCoords, unit=Unit.METERS)
     return distance
 
 def roverTravelDistance(targetDistance):
