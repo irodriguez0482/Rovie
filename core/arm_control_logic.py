@@ -23,7 +23,7 @@ def update_arm_state(context="clearing"):
         motors.vibration_off()
         arm.arm_up()
 
-    elif context == "pause":
+    elif context == "pause": # Pause is not implemented anywhere yet
         print("[ARM LOGIC] Pausing: stopping vibration and freezing arm.")
         motors.vibration_off()
         arm.stop_arm()
