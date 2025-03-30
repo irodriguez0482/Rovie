@@ -39,6 +39,7 @@ rover_project/
 │   ├── logger.py                 # Logging GPS data, sensor events, errors
 │   ├── coordinate_utils.py       # Haversine + coordinate math
 │   └── timer.py                  # For timeouts, delays, safety checks
+│   └── map_tracker.py                  # For creating pathing map
 ├── logs/                         # All generated logs saved here
 │   ├── gps/
 │   ├── sensors/
