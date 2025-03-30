@@ -23,13 +23,3 @@ def arm_down():
 def stop_arm():
     """Stops the arm movement."""
     motors.stop_arm()
-
-def is_arm_down():
-    """
-    Placeholder for future arm position sensor.
-
-    Returns True if the arm is fully lowered.
-    Replace this logic with real sensor input once integrated.
-    """
-    # TODO: Replace this with real sensor reading from Arduino or GPIO
-    return True
