@@ -3,6 +3,8 @@
 import time
 from configs.test_scenarios import SCENARIO
 
+print(f"[MAIN] Running SCENARIO: {SCENARIO['name']}")
+
 _trigger_time = SCENARIO.get("estop_trigger_time", None)
 _start_time = time.time()
 _triggered = False

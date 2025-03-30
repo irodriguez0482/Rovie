@@ -3,6 +3,8 @@
 import time
 from configs.test_scenarios import SCENARIO
 
+print(f"[MAIN] Running SCENARIO: {SCENARIO['name']}")
+
 _press_times = SCENARIO.get("force_button_press_times", [])
 _start_time = time.time()
 _triggered_times = set()

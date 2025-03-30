@@ -1,6 +1,9 @@
 # mock/arm.py
 
 import time
+from configs.test_scenarios import SCENARIO
+
+print(f"[MAIN] Running SCENARIO: {SCENARIO['name']}")
 
 # Internal state
 _arm_down = False

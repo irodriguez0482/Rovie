@@ -1,5 +1,9 @@
 # mock/motors.py
 
+from configs.test_scenarios import SCENARIO
+
+print(f"[MAIN] Running SCENARIO: {SCENARIO['name']}")
+
 current_command = {
     "motor_enable": 0,
     "drive_dir": "00",    # 00 = forward, 01 = back, 10 = left, 11 = right

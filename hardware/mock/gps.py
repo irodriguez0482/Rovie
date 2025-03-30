@@ -3,6 +3,8 @@
 from configs.test_scenarios import SCENARIO
 import time
 
+print(f"[MAIN] Running SCENARIO: {SCENARIO['name']}")
+
 # Initial GPS location
 _current_lat = 28.602000
 _current_lon = -81.198000
