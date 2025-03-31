@@ -10,9 +10,9 @@ def clear_line(line_length_m=3.0) -> bool:
     print(f"[AUTONOMOUS] Starting new line: target = {line_length_m} meters")
 
     start_coords = gps.GetCurrentLocation()
-    if None in start_coords:
-        print("[ERROR] GPS fix failed. Cannot start line.")
-        return False
+    # if None in start_coords:
+    #     print("[ERROR] GPS fix failed. Cannot start line.")
+    #     return False
 
     obstacle_encountered = False
 
