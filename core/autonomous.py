@@ -33,18 +33,18 @@ def clear_line(line_length_m=3.0) -> bool:
             motors.drive_forward()
             obstacle_encountered = True
 
-        current_coords = gps.GetCurrentLocation()
-        if None in current_coords:
-            print("[WARNING] GPS signal lost, retrying...")
-            time.sleep(0.2)
-            continue
+        # current_coords = gps.GetCurrentLocation()
+        # if None in current_coords:
+        #     print("[WARNING] GPS signal lost, retrying...")
+        #     time.sleep(0.2)
+        #     continue
 
-        distance = haversine_distance(start_coords, current_coords)
-        print(f"[AUTONOMOUS] Distance traveled: {distance:.2f}m")
+        # distance = haversine_distance(start_coords, current_coords)
+        # print(f"[AUTONOMOUS] Distance traveled: {distance:.2f}m")
 
-        if distance >= line_length_m:
-            print("[AUTONOMOUS] Target reached. Stopping.")
-            break
+        # if distance >= line_length_m:
+        #     print("[AUTONOMOUS] Target reached. Stopping.")
+        #     break
 
         time.sleep(0.2)
 
