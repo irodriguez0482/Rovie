@@ -49,6 +49,8 @@ import core.autonomous as autonomous
 
 # ========== MAIN ENTRY POINT ==========
 def main():
+    print("[MAIN] Waiting for start button...")
+    start_button.wait_for_press()
     print("[MAIN] Starting autonomous routine...")
     autonomous.run_autonomous_mode()
     print("[MAIN] Shutdown complete.")
