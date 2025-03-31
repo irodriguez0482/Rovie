@@ -3,7 +3,7 @@
 import RPi.GPIO as GPIO
 import time
 
-START_PIN = 27  # Change this
+START_PIN = 27  # Change this if need (Physical pin 13)
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(START_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # Active LOW

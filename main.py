@@ -29,12 +29,12 @@ if USE_MOCK:
     import hardware.mock.start_button as start_button
 else:
     print("[MAIN] Running in HARDWARE mode.")
-    import hardware.mock.gps as gps
-    import hardware.mock.motors as motors
-    import hardware.mock.force_button as force_button
-    import hardware.mock.arm as arm
-    import hardware.mock.estop as estop
-    import hardware.mock.start_button as start_button
+    import hardware.gps as gps
+    import hardware.motors as motors
+    import hardware.force_button as force_button
+    import hardware.arm as arm
+    import hardware.estop as estop
+    import hardware.start_button as start_button
 
 # Inject selected hardware modules into sys.modules so all core code uses them
 import types
