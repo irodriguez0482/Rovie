@@ -54,7 +54,7 @@ def _send_to_arduino(cmd):
         print(f"[MOTORS] Sending command: {cmd}")
         ser.write((cmd + "\n").encode())
         time.sleep(0.1)
-        while ser.in_waiting == 0
+        while ser.in_waiting == 0:
             print(f"Waiting for Arduino")
             time.sleep(0.1)
         while ser.in_waiting > 0:
