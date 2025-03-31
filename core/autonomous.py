@@ -9,7 +9,10 @@ from utils import map_tracker
 def clear_line(line_length_m=3.0) -> bool:
     print(f"[AUTONOMOUS] Starting new line: target = {line_length_m} meters")
 
-    start_coords = gps.GetCurrentLocation()
+    motors.stop_all()
+    motors.drive_forward()
+
+    # start_coords = gps.GetCurrentLocation()
     # if None in start_coords:
     #     print("[ERROR] GPS fix failed. Cannot start line.")
     #     return False
@@ -17,7 +20,7 @@ def clear_line(line_length_m=3.0) -> bool:
     obstacle_encountered = False
 
     arm_control_logic.update_arm_state("clearing")
-    motors.drive_forward()
+
 
     while True:
         if estop.is_engaged():
