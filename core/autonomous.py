@@ -19,8 +19,6 @@ def clear_line(line_length_m=3.0) -> bool:
     arm_control_logic.update_arm_state("clearing")
     motors.stop_all()
     motors.drive_forward()
-    arm.arm_up()
-    motors.vibration_on()
 
     while True:
         if estop.is_engaged():
