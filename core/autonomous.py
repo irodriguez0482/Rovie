@@ -16,8 +16,9 @@ def clear_line(line_length_m=3.0) -> bool:
 
     obstacle_encountered = False
 
-    # arm_control_logic.update_arm_state("clearing")
-    motors.stop_all()
+    motors.stop_all() # needed for arduino
+
+    arm_control_logic.update_arm_state("clearing")
     motors.drive_forward()
 
     while True:
