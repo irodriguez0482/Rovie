@@ -18,8 +18,8 @@ def clear_line(line_length_m=3.0) -> bool:
 
     motors.stop_all() # needed for arduino
 
-    arm.arm_up()
-    arm.arm_down()
+    # arm.arm_up()
+    # arm.arm_down()
     arm_control_logic.update_arm_state("clearing")
     # motors.drive_forward()
 
