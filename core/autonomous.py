@@ -19,7 +19,7 @@ def clear_line(line_length_m=3.0) -> bool:
     motors.stop_all() # needed for arduino
 
     arm_control_logic.update_arm_state("clearing")
-    motors.drive_forward()
+    # motors.drive_forward()
 
     while True:
         if estop.is_engaged():
