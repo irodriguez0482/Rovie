@@ -1,25 +1,17 @@
 # hardware/arm.py
 
-import time
 from hardware import motors
 
-# Time in seconds to allow arm to reach full up/down
-DEFAULT_ARM_MOVEMENT_TIME = 1.0  # Adjust as needed
-
 def arm_up():
-    """Raises the arm using motor control."""
-    motors.arm_up()
-    time.sleep(DEFAULT_ARM_MOVEMENT_TIME)
-    stop_arm()
-    print("[ARM] Raised.")
+    """Raises the arm and waits for Arduino confirmation."""
+    print("[ARM] Sending arm up command...")
+    motors._send_to_arduino("000100")  # Enable plow + up
 
 def arm_down():
-    """Lowers the arm using motor control."""
-    motors.arm_down()
-    time.sleep(DEFAULT_ARM_MOVEMENT_TIME)
-    stop_arm()
-    print("[ARM] Lowered.")
+    """Lowers the arm and waits for Arduino confirmation."""
+    print("[ARM] Sending arm down command...")
+    motors._send_to_arduino("000110")  # Enable plow + down
 
 def stop_arm():
-    """Stops the arm movement."""
-    motors.stop_arm()
+    """Stops the arm motor."""
+    motors._send_to_arduino("000000")  # Universal stop
