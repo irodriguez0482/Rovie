@@ -16,7 +16,7 @@ def clear_line(line_length_m=3.0) -> bool:
 
     obstacle_encountered = False
 
-    //arm_control_logic.update_arm_state("clearing")
+    # arm_control_logic.update_arm_state("clearing")
     motors.stop_all()
     motors.drive_forward()
 
