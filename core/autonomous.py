@@ -2,7 +2,7 @@
 
 import time
 from core import obstacle_avoidance, arm_control_logic
-from hardware import gps, motors, force_button, estop
+from hardware import gps, motors, force_button, estop, arm
 from utils.coordinate_utils import haversine_distance
 from utils import map_tracker
 
@@ -16,9 +16,11 @@ def clear_line(line_length_m=3.0) -> bool:
 
     obstacle_encountered = False
 
-    # arm_control_logic.update_arm_state("clearing")
+    arm_control_logic.update_arm_state("clearing")
     motors.stop_all()
     motors.drive_forward()
+    arm.arm_up()
+    motors.vibration_on()
 
     while True:
         if estop.is_engaged():
