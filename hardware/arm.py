@@ -15,3 +15,14 @@ def arm_down():
 def stop_arm():
     """Stops the arm motor."""
     motors._send_to_arduino("000000")  # Universal stop
+    
+def is_arm_down():
+    """Return True if arm is assumed to be fully down."""
+    # Right now, we rely on Arduino sending 'ArduinoReady' after lowering
+    print("[ARM] is_arm_down() → True (assumed)")
+    return True
+
+def is_arm_up():
+    """Return True if arm is assumed to be fully up."""
+    print("[ARM] is_arm_up() → True (assumed)")
+    return True
