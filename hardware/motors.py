@@ -4,7 +4,7 @@ import serial
 import time
 
 # ========== CONFIG ==========
-SERIAL_PORT = "/dev/ttyACM2"  # Update if needed
+SERIAL_PORT = "/dev/arduino_uno"  # Update this with arduino mega
 BAUD_RATE = 9600
 
 ser = None  # Serial connection object
