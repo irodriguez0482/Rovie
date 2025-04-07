@@ -5,7 +5,7 @@ import time
 from utils.logger import log_gps
 
 # Set up GPS serial communication
-SERIAL_PORT = "/dev/ttyACM0"  # CHANGE IS NECCESSARY
+SERIAL_PORT = "/dev/gps_2"  # CHANGE IS NECCESSARY
 BAUD_RATE = 9600
 
 def parse_gps(nmea_sentence):
