@@ -2,6 +2,10 @@
 
 import argparse
 import sys
+import time
+
+time.sleep(5)  # Let system settle before running GPIO/serial for boot
+
 
 # ========== CLI PARSER ==========
 def parse_args():
