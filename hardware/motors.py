@@ -4,7 +4,7 @@ import serial
 import time
 
 # ========== CONFIG ==========
-SERIAL_PORT = "/dev/ttyACM0"  # Update if needed
+SERIAL_PORT = "/dev/arduino_uno"  # Update this with arduino mega
 BAUD_RATE = 9600
 
 ser = None  # Serial connection object
@@ -54,6 +54,9 @@ def _send_to_arduino(cmd):
         print(f"[MOTORS] Sending command: {cmd}")
         ser.write((cmd + "\n").encode())
         time.sleep(0.1)
+        while ser.in_waiting == 0:
+            print(f"Waiting for Arduino")
+            time.sleep(0.1)
         while ser.in_waiting > 0:
             response = ser.readline().decode(errors="replace").strip()
             print(f"[Arduino] {response}")
