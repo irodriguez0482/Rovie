@@ -8,6 +8,7 @@ def run_demo_mode():
     try:
         motors.init_serial()
         motors.stop_all()
+        time.sleep(1)
         motors.drive_forward()
         time.sleep(1)
         motors.drive_backward()
