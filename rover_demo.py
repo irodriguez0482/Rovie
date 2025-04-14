@@ -23,7 +23,7 @@ def run_demo_mode():
         motors.vibration_on()
         time.sleep(runTime)
         # arm_control_logic.update_arm_state("reroute")
-        motors.vibration_on()
+        motors.vibration_off()
         time.sleep(runTime)
         motors.stop_all()
 
