@@ -69,3 +69,4 @@ if __name__ == "__main__":
         force_button.cleanup()
         estop.cleanup()
         start_button.cleanup()
+        GPIO.cleanup()
