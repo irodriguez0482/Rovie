@@ -51,6 +51,15 @@ def run_keyboard_demo():
                 motors.stop_all()
                 time.sleep(0.5)
 
+            elif keyboard.is_pressed('u'):
+                print("[DEMO] Arm Up")
+                arm_control_logic.update_arm_state(context="reroute")
+                time.sleep(0.5)
+
+            elif keyboard.is_pressed('j'):
+                print("[DEMO] Arm Down")
+                arm_control_logic.update_arm_state(context="clearing")
+                time.sleep(0.5)
 
             elif keyboard.is_pressed('v'):
                 print("[DEMO] Vibration ON")
