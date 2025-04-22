@@ -53,12 +53,12 @@ def run_keyboard_demo():
 
             elif keyboard.is_pressed('u'):
                 print("[DEMO] Arm Up")
-                arm_control_logic.update_arm_state(context="reroute")
+                motors.arm_up()
                 time.sleep(0.5)
 
             elif keyboard.is_pressed('j'):
                 print("[DEMO] Arm Down")
-                arm_control_logic.update_arm_state(context="clearing")
+                motors.arm_down()
                 time.sleep(0.5)
 
             elif keyboard.is_pressed('v'):
