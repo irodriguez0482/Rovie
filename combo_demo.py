@@ -23,8 +23,8 @@ def is_Pressed():
 def cleanUp():
     """Call this at program shutdown to clean up GPIO."""
     GPIO.cleanup()
-
-def run_keyboard_Demo():
+    
+def print_controls():
     print("\n[DEMO] Press a key to activate a function. Press 'q' to quit.\n")
     print("""
     Controls:
@@ -40,77 +40,87 @@ def run_keyboard_Demo():
     q - Quit
     """)
 
+def run_keyboard_Demo():
+    print_controls()
+
     motors.init_serial()
     motors.stop_all()
 
     try:
         while True:
             if keyboard.is_pressed('w'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Driving forward")
                 motors.drive_forward()
                 time.sleep(0.5)
+                print_controls()
 
             elif keyboard.is_pressed('s'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Driving backward")
                 motors.drive_backward()
                 time.sleep(0.5)
+                print_controls()
 
             elif keyboard.is_pressed('a'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Turning left")
                 motors.turn_left()
                 time.sleep(0.5)
+                print_controls()
 
             elif keyboard.is_pressed('d'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Turning right")
                 motors.turn_right()
                 time.sleep(0.5)
+                print_controls()
 
             elif keyboard.is_pressed('x'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Stopping all motors")
                 motors.stop_all()
                 time.sleep(0.5)
+                print_controls()
 
             elif keyboard.is_pressed('u'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Arm Up")
                 arm.arm_up()
                 time.sleep(0.5)
+                print_controls()
 
             elif keyboard.is_pressed('j'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Arm Down")
                 arm.arm_down()
                 time.sleep(0.5)
+                print_controls()
 
             elif keyboard.is_pressed('v'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Vibration ON")
                 motors.vibration_on()
                 time.sleep(0.5)
+                print_controls()
 
             elif keyboard.is_pressed('b'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Vibration OFF")
                 motors.vibration_off()
                 time.sleep(0.5)
+                print_controls()
 
             elif keyboard.is_pressed('q'):
+                print(chr(27) + "[2J")
                 print("[DEMO] Quitting demo mode.")
                 break
             elif is_Pressed():
+                print(chr(27) + "[2J")
                 print("Rover Demo Started!")
                 run_demo_mode()
                 time.sleep(0.5)
-                print("\n[DEMO] Press a key to activate a function. Press 'q' to quit.\n")
-                print("""
-                Controls:
-                w - Drive Forward
-                s - Drive Backward
-                a - Turn Left
-                d - Turn Right
-                x - Stop All
-                u - Arm Up
-                j - Arm Down
-                v - Vibration On
-                b - Vibration Off
-                q - Quit
-                """)
+                print_controls()
             time.sleep(0.1)  # Prevent CPU overuse
 
     except KeyboardInterrupt:
