@@ -96,7 +96,7 @@ def run_keyboard_Demo():
             elif is_Pressed():
                 print("Rover Demo Started!")
                 run_demo_mode()
-                time.sleep(30)
+                time.sleep(0.5)
                 print("\n[DEMO] Press a key to activate a function. Press 'q' to quit.\n")
                 print("""
                 Controls:
