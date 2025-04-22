@@ -1,7 +1,7 @@
 import time
 import keyboard  # pip install keyboard
 from core import obstacle_avoidance, arm_control_logic
-from hardware import gps, motors, force_button, estop
+from hardware import gps, motors, force_button, estop, arm
 from utils.coordinate_utils import haversine_distance
 from utils import map_tracker
 
@@ -53,12 +53,12 @@ def run_keyboard_demo():
 
             elif keyboard.is_pressed('u'):
                 print("[DEMO] Arm Up")
-                motors.arm_up()
+                arm.arm_up()
                 time.sleep(0.5)
 
             elif keyboard.is_pressed('j'):
                 print("[DEMO] Arm Down")
-                motors.arm_down()
+                arm.arm_down()
                 time.sleep(0.5)
 
             elif keyboard.is_pressed('v'):
