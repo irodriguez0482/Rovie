@@ -5,11 +5,11 @@ from utils.coordinate_utils import haversine_distance
 from utils import map_tracker
 
 def run_demo_mode():
-    runTime = 6
+    runTime = 3
     try:
         motors.init_serial()
         motors.stop_all()
-        time.sleep(runTime)
+        time.sleep(0.5)
         motors.drive_forward()
         time.sleep(runTime)
         motors.drive_backward()
