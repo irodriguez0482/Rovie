@@ -85,6 +85,17 @@ def stop_drive():
     command_bits["motor_enable"] = 0
     command_bits["drive_dir"] = "00"
     send_current_command()
+    
+# Arm
+def arm_up():
+    command_bits["plow_enable"] = 1
+    command_bits["plow_dir"] = 1
+    send_current_command()
+    
+def arm_up():
+    command_bits["plow_enable"] = 1
+    command_bits["plow_dir"] = 0
+    send_current_command()
 
 # Vibration
 def vibration_on():
