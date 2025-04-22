@@ -1,6 +1,6 @@
 import time
 from core import obstacle_avoidance, arm_control_logic
-from hardware import gps, motors, force_button, estop
+from hardware import gps, motors, force_button, estop, arm
 from utils.coordinate_utils import haversine_distance
 from utils import map_tracker
 
@@ -19,10 +19,10 @@ def run_demo_mode():
         motors.turn_right()
         time.sleep(runTime)
         motors.stop_drive()
-        # arm_control_logic.update_arm_state()
+        arm.arm_up()
         motors.vibration_on()
         time.sleep(runTime)
-        # arm_control_logic.update_arm_state("reroute")
+        arm.arm_down()
         motors.vibration_off()
         time.sleep(runTime)
         motors.stop_all()
