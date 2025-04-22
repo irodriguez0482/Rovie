@@ -34,9 +34,9 @@ def run_demo_mode():
         force_button.cleanup()
         estop.cleanup()
         
-try:
-    run_demo_mode()
-except KeyboardInterrupt:
-    print("\n[DEMO] Shutdown via KeyboardInterrupt.")
-finally:
-    motors.cleanup()
+# try:
+#     run_demo_mode()
+# except KeyboardInterrupt:
+#     print("\n[DEMO] Shutdown via KeyboardInterrupt.")
+# finally:
+#     motors.cleanup()
