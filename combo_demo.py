@@ -9,7 +9,7 @@ from core import obstacle_avoidance, arm_control_logic
 from hardware import gps, motors, force_button, estop, arm
 from utils.coordinate_utils import haversine_distance
 from utils import map_tracker
-import rover_demo_cycle
+from rover_demo_cycle import run_demo_mode
 #add Alex's demo code under a name
 
 # Initialize GPIO
