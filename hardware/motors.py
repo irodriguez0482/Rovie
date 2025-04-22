@@ -92,7 +92,7 @@ def arm_up():
     command_bits["plow_dir"] = 1
     send_current_command()
     
-def arm_up():
+def arm_down():
     command_bits["plow_enable"] = 1
     command_bits["plow_dir"] = 0
     send_current_command()
