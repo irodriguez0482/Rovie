@@ -10,14 +10,13 @@ from hardware import gps, motors, force_button, estop, arm
 from utils.coordinate_utils import haversine_distance
 from utils import map_tracker
 from rover_demo_cycle import run_demo_mode
-#add Alex's demo code under a name
 
 # Initialize GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(demo_button, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def is_Pressed():
-    """Returns True if the force button is currently pressed."""
+    """Returns True if the demo button is currently pressed."""
     return GPIO.input(demo_button) == GPIO.LOW
 
 def cleanUp():
