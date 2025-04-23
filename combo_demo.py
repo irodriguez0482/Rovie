@@ -35,7 +35,6 @@ def print_controls():
     u - Arm Up
     j - Arm Down
     v - Vibration On
-    b - Vibration Off
     q - Quit
     """)
 
@@ -114,13 +113,14 @@ def run_keyboard_Demo():
                 run_demo_mode()
                 time.sleep(0.5)
                 print_controls()
-                time.sleep(0.1)  # Prevent CPU overuse
+            
 
             if hasattr(motors, "ser"):
                 if motors.ser.in_waiting > 0:
                     response = motors.ser.readline().decode(errors="replace").strip()
                     print(f"[Arduino] {response}")
-
+            
+            time.sleep(0.1)  # Prevent CPU overuse
     except KeyboardInterrupt:
         print("[DEMO] Interrupted by user.")
     finally:
