@@ -64,21 +64,21 @@ def run_keyboard_demo():
                 time.sleep(0.5)
 
             elif keyboard.is_pressed('v'):
-            print("[DEMO] Vibration ON (1s pulse)")
-            motors.vibration_on()
-            time.sleep(1)
-            motors.vibration_off()
-            print("[DEMO] Vibration OFF (auto)")
-            time.sleep(0.5)  # To avoid accidental re-trigger
+                print("[DEMO] Vibration ON (1s pulse)")
+                motors.vibration_on()
+                time.sleep(1)
+                motors.vibration_off()
+                print("[DEMO] Vibration OFF (auto)")
+                time.sleep(0.5)  # To avoid accidental re-trigger
 
             elif keyboard.is_pressed('q'):
                 print("[DEMO] Quitting demo mode.")
                 break
 
             if hasattr(motors, "ser"):
-            if motors.ser.in_waiting > 0:
-                response = motors.ser.readline().decode(errors="replace").strip()
-                print(f"[Arduino] {response}")
+                if motors.ser.in_waiting > 0:
+                    response = motors.ser.readline().decode(errors="replace").strip()
+                    print(f"[Arduino] {response}")
 
             time.sleep(0.1)  # Prevent CPU overuse
 
