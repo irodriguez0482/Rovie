@@ -97,18 +97,12 @@ def run_keyboard_Demo():
                 print_controls()
 
             elif keyboard.is_pressed('v'):
-                print(chr(27) + "[2J")
-                print("[DEMO] Vibration ON")
+                print("[DEMO] Vibration ON (1s pulse)")
                 motors.vibration_on()
-                time.sleep(0.5)
-                print_controls()
-
-            elif keyboard.is_pressed('b'):
-                print(chr(27) + "[2J")
-                print("[DEMO] Vibration OFF")
+                time.sleep(1)
                 motors.vibration_off()
-                time.sleep(0.5)
-                print_controls()
+                print("[DEMO] Vibration OFF (auto)")
+                time.sleep(0.5)  # To avoid accidental re-trigger
 
             elif keyboard.is_pressed('q'):
                 print(chr(27) + "[2J")
@@ -120,7 +114,12 @@ def run_keyboard_Demo():
                 run_demo_mode()
                 time.sleep(0.5)
                 print_controls()
-            time.sleep(0.1)  # Prevent CPU overuse
+                time.sleep(0.1)  # Prevent CPU overuse
+
+            if hasattr(motors, "ser"):
+                if motors.ser.in_waiting > 0:
+                    response = motors.ser.readline().decode(errors="replace").strip()
+                    print(f"[Arduino] {response}")
 
     except KeyboardInterrupt:
         print("[DEMO] Interrupted by user.")
