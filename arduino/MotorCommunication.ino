@@ -1,4 +1,4 @@
-//functions: 2 for data, 4 for 17, 1 for 23
+//functions: 2 for data, 4 for 17, 1 for 23, 2 for buttons (remove with Pi connected)
 void getSerialData();
 void processData(String command);
 void move17(int dir17); //calls rover movement
@@ -7,10 +7,19 @@ void backward();
 void left();
 void right();
 void plow(int dir23); //edit later when gears start working
+//buttons
+void force(); //force sensor
+void eStop(); //E-stop button
 
 //counts
 int rot23=0; //keeps track of how much to rotate plow, iterates until rCount
-int rCount=15; //change count to move plow more
+int rCount=2; //change count to move plow more //2 is best
+int level=0;
+int max=20; //max level of plow
+int min=-20; //minimum level of plow
+//at half-speed, 5 moves it 2 inches.
+//1 moves it 3/8 of an inch
+//using 2 for 3/4 on an inch
 //will also have turn counts, WIP
 
 //serial communication bits
@@ -48,7 +57,13 @@ int enPin23 = A2;
 
 
 //pills
-int Pillpin=A5; //change later, and add one more
+int Pillpin=28; //Controls mosfet on/off for vibration
+
+//force sensor
+int bPin = 22;
+int oPin = 24;
+int gPin = A12;
+int sPin = A13;
 
 //motor info
 int numSteps = 200;  // 360/1.8 degree = 200 - NEMA17 no reduction 
@@ -83,7 +98,13 @@ void setup() {
   pinMode(enPin23,OUTPUT);
 //pill
   pinMode(Pillpin,OUTPUT);
-  //will have another pin when the 16th gets added
+//force sensor
+  pinMode(oPin, OUTPUT);
+  pinMode(bPin, INPUT_PULLUP);  // Use internal pull-up resistor
+//e-stop
+  pinMode(sPin, OUTPUT);
+  pinMode(gPin, INPUT_PULLUP);  // Use internal pull-up resistor
+
   Serial.println("ArduinoReady");
 } 
 
@@ -108,7 +129,9 @@ void getSerialData(){
     Serial.print("You sent me: ");
     Serial.println(data);
   }
+  eStop(); //check before processing, remove with Pi connected
   processData(data);
+  force(); //check after processing, remove with Pi connected
 
 }
 
@@ -122,7 +145,7 @@ void processData(String command){
   //}
     //motors on or off
 
-    //turn pill off before moving plow      
+    //turn pill off before moving plow   
     if(enPill==0){
       digitalWrite(Pillpin, LOW);
     } 
@@ -131,10 +154,18 @@ void processData(String command){
       digitalWrite(enPin23,HIGH); //turns plow motors off
       rot23=0; //resets plow so that it can rotate again
     }
-    else{
+
+    if(rCount==rot23){
+      digitalWrite(enPin23,HIGH);
+      data[3]=en23+47; //disables plow movement by rewriting received data
+      Serial.println("ArduinoReady");
+      }
+
+    if((rot23<rCount) && (en23!=0)){
       digitalWrite(enPin23,LOW); //allows plow motors to operating
-      plow(pDir); 
-    }
+      plow(pDir);
+      rot23=rot23+1;
+    }   
 
     //dont turn on pill until plow has moved
     if(enPill==1){
@@ -162,21 +193,31 @@ void move17(int dir17){
       break;
     case 01:
       backward();
-      //Serial.println("backward");
+      
       break;
     case 10:
       //specify 90 or 180
       left();
-      //Serial.println("left");
+      
       break;
     case 11:
       //specify 90 or 180
       right();
-      //Serial.println("right");
+      
       break;
     default:
       break;
   }
+
+// For loop makes 200 * 1 pulses for making one full cycle rotation 
+  for(int x = 0; x < numSteps * 2 * rotations; x++) {  //times 2 cause half-step
+    digitalWrite(stepPinL,HIGH);   
+    digitalWrite(stepPinR,HIGH);
+    delayMicroseconds(delay1); 
+    digitalWrite(stepPinL,LOW);
+    digitalWrite(stepPinR,LOW);     
+    delayMicroseconds(delay1);  
+  } 
 
 }
 
@@ -201,16 +242,7 @@ void forward(){
   digitalWrite(ms1PinR, HIGH); 
   digitalWrite(ms2PinR, LOW); 
   digitalWrite(ms3PinR, LOW);
-
-  // For loop makes 200 * 1 pulses for making one full cycle rotation 
-  for(int x = 0; x < numSteps * 2 * rotations; x++) {  //times 2 cause half-step
-    digitalWrite(stepPinL,HIGH);   
-    digitalWrite(stepPinR,HIGH);
-    delayMicroseconds(delay1); 
-    digitalWrite(stepPinL,LOW);
-    digitalWrite(stepPinR,LOW);     
-    delayMicroseconds(delay1);  
-  }  
+ 
 }
 
 void backward(){
@@ -225,18 +257,21 @@ void backward(){
   digitalWrite(ms1PinR, HIGH); 
   digitalWrite(ms2PinR, LOW); 
   digitalWrite(ms3PinR, LOW);
-
-  // For loop makes 200 * 1 pulses for making one full cycle rotation 
-  for(int x = 0; x < numSteps * 2 * rotations; x++) {  //times 2 cause half-step
-    digitalWrite(stepPinL,HIGH);   
-    digitalWrite(stepPinR,HIGH);
-    delayMicroseconds(delay1); 
-    digitalWrite(stepPinL,LOW);
-    digitalWrite(stepPinR,LOW);     
-    delayMicroseconds(delay1);  
-  }  
+  
 } 
 void right(){ //currently a wide turn
+  digitalWrite(dirPinR,HIGH);  // Enables the motor to move in a particular direction                            
+  digitalWrite(dirPinL,HIGH); // Enables the motor to move in a particular direction
+  digitalWrite(dirPinLweird,LOW);  
+
+  //coded for half steps right now because gears are struggling, change if fixed 
+  digitalWrite(ms1PinL, HIGH); 
+  digitalWrite(ms2PinL, LOW); 
+  digitalWrite(ms3PinL, LOW);
+  digitalWrite(ms1PinR, HIGH); 
+  digitalWrite(ms2PinR, LOW); 
+  digitalWrite(ms3PinR, LOW);
+  /*
   //digitalWrite(enPinR,HIGH);
   digitalWrite(dirPinR,LOW);  // Enables the motor to move in a particular direction                            
   digitalWrite(dirPinL,HIGH); // Enables the motor to move in a particular direction  
@@ -247,79 +282,92 @@ void right(){ //currently a wide turn
   digitalWrite(ms2PinL, LOW); 
   digitalWrite(ms3PinL, LOW);
   //need to double-check that this is the correct speed, it might be high high low 
-  digitalWrite(ms1PinR, LOW); 
+  digitalWrite(ms1PinR, HIGH); 
   digitalWrite(ms2PinR, HIGH); 
   digitalWrite(ms3PinR, LOW);
-
-  // For loop makes 200 * 1 pulses for making one full cycle rotation 
-  
-  for(int x = 0; x < numSteps * 2 * rotations; x++) {  //times 2 cause half-step
-    digitalWrite(stepPinL,HIGH);   
-   digitalWrite(stepPinR,HIGH);
-
-    delayMicroseconds(delay1); 
-
-    digitalWrite(stepPinL,LOW);
-    digitalWrite(stepPinR,LOW);
-
-    delayMicroseconds(delay1);  
-  } 
- 
+*/
 }
 
 
 void left(){ //currently a wide turn
-  
+ digitalWrite(dirPinR,LOW);  // Enables the motor to move in a particular direction                            
+  digitalWrite(dirPinL,LOW); // Enables the motor to move in a particular direction
+  digitalWrite(dirPinLweird,HIGH);  
+
+  //coded for half steps right now because gears are struggling, change if fixed 
+  digitalWrite(ms1PinL, HIGH); 
+  digitalWrite(ms2PinL, LOW); 
+  digitalWrite(ms3PinL, LOW);
+  digitalWrite(ms1PinR, HIGH); 
+  digitalWrite(ms2PinR, LOW); 
+  digitalWrite(ms3PinR, LOW);
+ /* 
  digitalWrite(dirPinR,LOW);  // Enables the motor to move in a particular direction                            
   digitalWrite(dirPinL,HIGH); // Enables the motor to move in a particular direction  
   digitalWrite(dirPinLweird,LOW);    
 //need to double-check that this is the correct speed, it might be high high low  
-  digitalWrite(ms1PinL, LOW); 
+  digitalWrite(ms1PinL, HIGH); 
   digitalWrite(ms2PinL, HIGH); 
   digitalWrite(ms3PinL, LOW);
   //coded for half steps right now because gears are struggling, change later
   digitalWrite(ms1PinR, HIGH); 
   digitalWrite(ms2PinR, LOW); 
   digitalWrite(ms3PinR, LOW);
-
-  // For loop makes 200 * 1 pulses for making one full cycle rotation 
-  
-  for(int x = 0; x < numSteps * 2 * rotations; x++) {  //times 2 cause half-step
-    digitalWrite(stepPinL,HIGH);   
-    digitalWrite(stepPinR,HIGH);
-
-    delayMicroseconds(delay1); 
-
-    digitalWrite(stepPinL,LOW);
-    digitalWrite(stepPinR,LOW);
-
-    delayMicroseconds(delay1);  
-  }  
+ */
 } 
 
 void plow(int dir23){
-  //nema23     
+  //nema23 
   if(dir23==0){        
-  digitalWrite(dirPin23,LOW); // up  
+    digitalWrite(dirPin23,LOW); // down
+    if(rot23==0){
+      level=level-1;  
+    }
+    if(level<min){
+      digitalWrite(enPin23,HIGH);//allows for a max height
+      Serial.println("Level cannot be changed"); 
+    }
   }
   else{
-    digitalWrite(dirPin23,HIGH); // down
-  }                             
-  digitalWrite(ms1Pin23, LOW); 
+    digitalWrite(dirPin23,HIGH); // up
+    if(rot23==0){
+      level=level+1;  
+    }
+    if(level>max){
+      digitalWrite(enPin23,HIGH);//allows for a max height
+      Serial.println("Level cannot be changed");
+    } 
+  }     
+  //half-step for better precision                        
+  digitalWrite(ms1Pin23, HIGH); 
   digitalWrite(ms2Pin23, LOW); 
   digitalWrite(ms3Pin23, LOW);
 
-  while(rot23<rCount){ //keeps plow from moving too far up or down, experiments will determine how much to move 
   //Serial.println("Plow");
-  for(int x = 0; x < numSteps * 1 * rotations; x++) {  //times 2 cause half-step
+  for(int x = 0; x < numSteps * 2 * rotations; x++) {  //times 2 cause half-step
     digitalWrite(stepPin23,HIGH);  
     delayMicroseconds(delay1);  
     digitalWrite(stepPin23,LOW);    
     delayMicroseconds(delay1);  
   } 
-  rot23=rot23+1;
-  if(rot23==rCount){
-    Serial.println("ArduinoReady");
-  }
-  }
+
 } 
+//String oldData="000000";
+//only use when not using Pi
+void force(){ //force sensor
+int buttonState = digitalRead(bPin);  // Read once, reuse
+  if (buttonState == LOW) {
+    Serial.println("Load detected");
+    //oldData=data;
+    //data="000110";
+    processData("000110");
+  }
+}
+
+void eStop(){ //E-stop button
+  int stopState = digitalRead(gPin);  // Read once, reuse
+  if (stopState == LOW) {
+    Serial.println("E-stop pushed");
+    data="000000";
+  }
+}
