@@ -2,6 +2,10 @@
 
 import argparse
 import sys
+import time
+
+time.sleep(5)  # Let system settle before running GPIO/serial for boot
+
 
 # ========== CLI PARSER ==========
 def parse_args():
@@ -29,12 +33,12 @@ if USE_MOCK:
     import hardware.mock.start_button as start_button
 else:
     print("[MAIN] Running in HARDWARE mode.")
-    import hardware.mock.gps as gps
-    import hardware.mock.motors as motors
-    import hardware.mock.force_button as force_button
-    import hardware.mock.arm as arm
-    import hardware.mock.estop as estop
-    import hardware.mock.start_button as start_button
+    import hardware.gps as gps
+    import hardware.motors as motors
+    import hardware.force_button as force_button
+    import hardware.arm as arm
+    import hardware.estop as estop
+    import hardware.start_button as start_button
 
 # Inject selected hardware modules into sys.modules so all core code uses them
 import types
@@ -49,6 +53,8 @@ import core.autonomous as autonomous
 
 # ========== MAIN ENTRY POINT ==========
 def main():
+    print("[MAIN] Waiting for start button...")
+    start_button.wait_for_press()
     print("[MAIN] Starting autonomous routine...")
     autonomous.run_autonomous_mode()
     print("[MAIN] Shutdown complete.")
@@ -63,3 +69,4 @@ if __name__ == "__main__":
         force_button.cleanup()
         estop.cleanup()
         start_button.cleanup()
+        GPIO.cleanup()
